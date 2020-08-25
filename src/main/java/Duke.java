@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Duke {
     public static void main(String[] args) {
         /*
@@ -11,6 +13,20 @@ public class Duke {
         System.out.println("____________________________________________________________");
         System.out.println("Hello! I'm Duke");
         System.out.println("What can I do for you?");
+        System.out.println("____________________________________________________________");
+
+        //Scanner in
+        Scanner in = new Scanner(System.in);
+        String user_input = in.nextLine();
+
+        //Echo user inputs (if not 'bye')
+        do {
+            System.out.println("____________________________________________________________");
+            System.out.println(user_input);
+            System.out.println("____________________________________________________________");
+            user_input = in.nextLine();
+        } while (!user_input.equals("bye"));
+
         System.out.println("____________________________________________________________");
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println("____________________________________________________________");
