@@ -15,17 +15,32 @@ public class Duke {
         System.out.println("What can I do for you?");
         System.out.println("____________________________________________________________");
 
+        //Variables
+        String[] userInputList = new String[100];
+        int listCount = 0;
+
         //Scanner in
         Scanner in = new Scanner(System.in);
-        String user_input = in.nextLine();
+        String userInput;
 
         //Echo user inputs (if not 'bye')
+        //Add user input to list
         do {
-            System.out.println("____________________________________________________________");
-            System.out.println(user_input);
-            System.out.println("____________________________________________________________");
-            user_input = in.nextLine();
-        } while (!user_input.equals("bye"));
+            userInput = in.nextLine();
+            if (!userInput.equals("bye")) { //this line is so that bye is not 'added'
+                System.out.println("____________________________________________________________");
+                if (userInput.equals("list")) {
+                    for (int i = 0; i < listCount; i++) {
+                        System.out.println((i + 1) + ". " + userInputList[i]);
+                    }
+                } else {
+                    userInputList[listCount] = userInput;
+                    listCount++;
+                    System.out.println("added: " + userInput);
+                }
+                System.out.println("____________________________________________________________");
+            }
+        } while (!userInput.equals("bye"));
 
         System.out.println("____________________________________________________________");
         System.out.println("Bye. Hope to see you again soon!");
