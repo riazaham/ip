@@ -32,16 +32,21 @@ public class Duke {
                 if (userInput.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < listCount; i++) {
-                        System.out.println((i + 1) + ". " + userInputList[i].getStatusIcon() + " " + userInputList[i].getDescription());
+                        System.out.println((i + 1) + ". "
+                                + userInputList[i].getStatusIcon() + " "
+                                + userInputList[i].getDescription());
                     }
                 } else {
                     //Split to check for 'done'
                     String[] userInputs = userInput.split("\\s+");
                     if (userInputs[0].equals("done")) {
                         //Assuming the format is 'done number'
-                        int listNumber = Integer.parseInt(userInputs[1]) - 1; //List indexed from 0, offset by 1
+                        //List indexed from 0, offset by 1
+                        int listNumber = Integer.parseInt(userInputs[1]) - 1;
                         userInputList[listNumber].setIsDone(true);
-                        System.out.println("Nice! I've marked this task as done:\n" + userInputList[listNumber].getStatusIcon() + " " + userInputList[listNumber].getDescription());
+                        System.out.println("Nice! I've marked this task as done:\n"
+                                + userInputList[listNumber].getStatusIcon() + " "
+                                + userInputList[listNumber].getDescription());
                     } else {
                         Task newTask = new Task(userInput);
                         userInputList[listCount] = newTask;
