@@ -9,6 +9,7 @@ public class Event extends Task {
         return typeOfTask;
     }
 
+    @Override
     public String toString() {
         return getTypeOfTask() + getStatusIcon() + " " + getDescription();
     }

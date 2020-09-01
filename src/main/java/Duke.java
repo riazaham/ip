@@ -1,13 +1,17 @@
 import java.util.Scanner;
 
 /**
- * Chat bot for managing tasks
+ * Chatbot for managing tasks
  *
  * Current commands:
- * list -> shows the list of tasks
- * done "index" -> marks the task at that index as done
- * e.g done 1 -> marks the 1st task as done
- * any other input -> echos the input and adds it to a list
+ * todo "task description"                            -> adds todo task to list
+ * deadlilne "task description /by deadline"          -> adds deadline task to list
+ * event "task description /at event"                 -> adds event task to list
+ * list                                               -> shows the list of tasks
+ * done "index"                                       -> marks the task at that index as done
+ * e.g done 1                                         -> marks the 1st task as done
+ * bye                                                -> system exits after exit message
+ * any other input                                    -> echos the input and adds it to a list
  */
 
 public class Duke {
@@ -24,17 +28,14 @@ public class Duke {
          *         + "|____/ \\__,_|_|\\_\\___|\n";
          * System.out.println("Hello from\n" + logo);
          */
-        //Intro message
-        System.out.println("____________________________________________________________");
-        System.out.println("Hello! I'm Duke");
-        System.out.println("What can I do for you?");
-        System.out.println("____________________________________________________________");
+
+        introMessage();
 
         //Scanner in
         Scanner in = new Scanner(System.in);
         String userInput;
 
-        //Check user input and add accordingly
+        //Check user input and add/modify accordingly
         do {
             userInput = in.nextLine();
             String[] userInputs = userInput.split("\\s+");
@@ -82,6 +83,14 @@ public class Duke {
         } while (!userInput.equals("bye"));
 
         exitDuke();
+    }
+
+    public static void introMessage() {
+        //Intro message
+        System.out.println("____________________________________________________________");
+        System.out.println("Hello! I'm Duke");
+        System.out.println("What can I do for you?");
+        System.out.println("____________________________________________________________");
     }
 
     //Split at delimiter with format -> before (delimiter: after)
