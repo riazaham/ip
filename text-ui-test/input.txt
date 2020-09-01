@@ -1,0 +1,8 @@
+hello
+todo borrow book
+deadline return book /by Sunday
+event RHG /at Lounge
+list
+done 2
+list
+bye
