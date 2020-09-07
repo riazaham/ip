@@ -41,48 +41,58 @@ public class Duke {
             String[] userInputs = userInput.split("\\s+");
             if (!userInput.equals("bye")) { //this line is so that bye is not 'added'
                 System.out.println("____________________________________________________________");
-                switch (userInputs[0]) {
-                case "todo":
-                    String todo = "";
-                    for (int i = 1; i < userInputs.length; i++) {
-                        todo += userInputs[i] + " ";
+                try {
+                    switch (userInputs[0]) {
+                    case "todo":
+                        addTodoToList(userInputs);
+                        break;
+                    case "deadline":
+                        addDeadlineToList(userInputs);
+                        break;
+                    case "event":
+                        addEventToList(userInputs);
+                        break;
+                    case "list":
+                        listTasks();
+                        break;
+                    case "done":
+                        markTaskAsDone(userInputs);
+                        break;
+                    default:
+                        System.out.println("OOPS!!! I'm sorry, but I don't know what that means :-(");
+                        break;
                     }
-                    Todo addedTodo = new Todo(todo);
-                    addTodoToList(addedTodo);
-                    break;
-                case "deadline":
-                    //Split deadline -> format -> "description (by: deadline)"
-                    String deadline = getFormattedString(userInputs, "/by");
-                    Deadline addedDeadline = new Deadline(deadline);
-                    addDeadlineToList(addedDeadline);
-                    break;
-                case "event":
-                    String event = getFormattedString(userInputs, "/at");
-                    Event addedEvent = new Event(event);
-                    addEventToList(addedEvent);
-                    break;
-                case "list":
-                    System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < listCount; i++) {
-                        System.out.println((i + 1) + ". " + userInputList[i]);
-                    }
-                    break;
-                case "done":
-                    //List indexed from 0, offset by 1
-                    int listNumber = Integer.parseInt(userInputs[1]) - 1;
-                    userInputList[listNumber].setIsDone(true);
-                    System.out.println("Nice! I've marked this task as done:\n    " + userInputList[listNumber]);
-                    break;
-                default:
-                    Task addedTask = new Task(userInput);
-                    addTaskToList(addedTask);
-                    break;
+                } catch (DukeException e) {
+                    System.out.println(e);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("OOPS!!! The description of done needs to be followed by a task number." );
+                } catch (NullPointerException e) {
+                    System.out.println("OOPS!!! The specified task does not exist. There are only " + listCount + " tasks");
                 }
                 System.out.println("____________________________________________________________");
             }
         } while (!userInput.equals("bye"));
 
         exitDuke();
+    }
+
+    public static void markTaskAsDone(String[] userInputs) throws ArrayIndexOutOfBoundsException, NullPointerException {
+        //Check for only 'done'
+        if (userInputs.length == 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+        //List indexed from 0, offset by 1
+        int listNumber = Integer.parseInt(userInputs[1]) - 1;
+        userInputList[listNumber].setIsDone(true);
+        System.out.println("Nice! I've marked this task as done:\n    " + userInputList[listNumber]);
+    }
+
+    public static void listTasks() {
+        System.out.println("Here are the tasks in your list:");
+        for (int i = 0; i < listCount; i++) {
+            System.out.println((i + 1) + ". " + userInputList[i]);
+        }
     }
 
     public static void introMessage() {
@@ -135,7 +145,16 @@ public class Duke {
         System.out.println("Now you have " + listCount + " tasks in the list.");
     }
 
-    public static void addEventToList(Event addedEvent) {
+    public static void addEventToList(String[] userInputs) throws DukeException {
+        //Check for only "event"
+        if (userInputs.length == 1) {
+            throw new DukeException("event");
+        }
+
+        //Split event -> format -> "description (at: event)"
+        String event = getFormattedString(userInputs, "/at");
+        Event addedEvent = new Event(event);
+
         //Add into list
         userInputList[listCount] = addedEvent;
         listCount++;
@@ -146,7 +165,16 @@ public class Duke {
         System.out.println("Now you have " + listCount + " tasks in the list.");
     }
 
-    public static void addDeadlineToList(Deadline addedDeadline) {
+    public static void addDeadlineToList(String[] userInputs) throws DukeException {
+        //Check for only "deadline"
+        if (userInputs.length == 1) {
+            throw new DukeException("deadline");
+        }
+
+        //Split deadline -> format -> "description (by: deadline)"
+        String deadline = getFormattedString(userInputs, "/by");
+        Deadline addedDeadline = new Deadline(deadline);
+
         //Add into list
         userInputList[listCount] = addedDeadline;
         listCount++;
@@ -157,7 +185,20 @@ public class Duke {
         System.out.println("Now you have " + listCount + " tasks in the list.");
     }
 
-    public static void addTodoToList(Todo addedTodo) {
+    public static void addTodoToList(String[] userInputs) throws DukeException {
+        String todo = "";
+
+        //Check for only "todo"
+        if (userInputs.length == 1) {
+            throw new DukeException("todo");
+        }
+
+        //Add words after todo into a string
+        for (int i = 1; i < userInputs.length; i++) {
+            todo += userInputs[i] + " ";
+        }
+        Todo addedTodo = new Todo(todo);
+
         //Add into list
         userInputList[listCount] = addedTodo;
         listCount++;
