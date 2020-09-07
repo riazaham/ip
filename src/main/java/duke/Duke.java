@@ -1,3 +1,10 @@
+package duke;
+
+import duke.tasks.Deadline;
+import duke.tasks.Event;
+import duke.tasks.Task;
+import duke.tasks.Todo;
+
 import java.util.Scanner;
 
 /**
@@ -98,7 +105,7 @@ public class Duke {
     public static void introMessage() {
         //Intro message
         System.out.println("____________________________________________________________");
-        System.out.println("Hello! I'm Duke");
+        System.out.println("Hello! I'm duke.Duke");
         System.out.println("What can I do for you?");
         System.out.println("____________________________________________________________");
     }
@@ -135,7 +142,7 @@ public class Duke {
     }
 
     public static void addTaskToList(Task addedTask) {
-        //Add Task to list
+        //Add duke.tasks.Task to list
         userInputList[listCount] = addedTask;
         listCount++;
 
