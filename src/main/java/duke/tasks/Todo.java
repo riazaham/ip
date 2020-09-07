@@ -1,7 +1,9 @@
-public class Deadline extends Task {
-    protected final String typeOfTask = "[D]";
+package duke.tasks;
 
-    public Deadline(String description) {
+public class Todo extends Task {
+    protected final String typeOfTask = "[T]";
+
+    public Todo(String description) {
         super(description);
     }
 
