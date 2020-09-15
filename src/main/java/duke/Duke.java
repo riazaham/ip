@@ -6,6 +6,7 @@ import duke.tasks.Task;
 import duke.tasks.Todo;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Chatbot for managing tasks
@@ -17,15 +18,15 @@ import java.util.Scanner;
  * list                                               -> shows the list of tasks
  * done "index"                                       -> marks the task at that index as done
  * e.g done 1                                         -> marks the 1st task as done
+ * delete "index"                                     -> deletes the task at that index
+ * e.g delete 1                                       -> deletes the 1st task from the list
  * bye                                                -> system exits after exit message
  * any other input                                    -> echos the input and adds it to a list
  */
 
 public class Duke {
     //Variables
-    public static int listCount = 0;
-    public static Task[] userInputList = new Task[100];
-    public static Task[] tempUserInputList = new Task[100];
+    public static ArrayList<Task> userInputList = new ArrayList<>();
 
     public static void main(String[] args) {
         /*
@@ -75,10 +76,11 @@ public class Duke {
                     }
                 } catch (DukeException e) {
                     System.out.println(e);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.out.println("OOPS!!! The description of done needs to be followed by a task number." );
-                } catch (NullPointerException e) {
-                    System.out.println("OOPS!!! The specified task does not exist. There are only " + listCount + " tasks");
+                } catch (ArrayIndexOutOfBoundsException e) { //done and delete
+                    System.out.println("OOPS!!! The command needs to be followed by a task number." );
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("OOPS!!! The specified task does not exist. There are only " +
+                            userInputList.size() + " tasks");
                 }
                 System.out.println("____________________________________________________________");
             }
@@ -89,25 +91,15 @@ public class Duke {
 
     public static void deleteTask(String[] userInputs) {
         int indexToBeDeleted = Integer.parseInt(userInputs[1]) - 1;
-        Task deletedTask = userInputList[indexToBeDeleted];
-        //Can be replaced with manual array copy
-        //Copy from the index after the item to be deleted into temp user list
-        for (int i = indexToBeDeleted + 1; i < listCount; i++) {
-            tempUserInputList[i - 1] = userInputList[i];
-        }
-        listCount--;
-        //Copy back to user list excluding the deleted item
-        for (int i = indexToBeDeleted; i < listCount; i++) {
-            tempUserInputList[i] = userInputList[i];
-        }
+        Task deletedTask = userInputList.remove(indexToBeDeleted);
 
         //Notify user
         System.out.println("Noted. I've removed this task:");
         System.out.println("    " + deletedTask);
-        System.out.println("Now you have " + listCount + " tasks in the list");
+        System.out.println("Now you have " + userInputList.size() + " tasks in the list");
     }
 
-    public static void markTaskAsDone(String[] userInputs) throws ArrayIndexOutOfBoundsException, NullPointerException {
+    public static void markTaskAsDone(String[] userInputs) throws ArrayIndexOutOfBoundsException {
         //Check for only 'done'
         if (userInputs.length == 1) {
             throw new ArrayIndexOutOfBoundsException();
@@ -115,14 +107,16 @@ public class Duke {
 
         //List indexed from 0, offset by 1
         int listNumber = Integer.parseInt(userInputs[1]) - 1;
-        userInputList[listNumber].setIsDone(true);
-        System.out.println("Nice! I've marked this task as done:\n    " + userInputList[listNumber]);
+        userInputList.get(listNumber).setIsDone(true);
+        System.out.println("Nice! I've marked this task as done:\n    " + userInputList.get(listNumber));
     }
 
     public static void listTasks() {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < listCount; i++) {
-            System.out.println((i + 1) + ". " + userInputList[i]);
+        int counter = 1;
+        for (Task task : userInputList) {
+            System.out.println(counter + ". " + task);
+            counter++;
         }
     }
 
@@ -167,13 +161,12 @@ public class Duke {
 
     public static void addTaskToList(Task addedTask) {
         //Add duke.tasks.Task to list
-        userInputList[listCount] = addedTask;
-        listCount++;
+        userInputList.add(addedTask);
 
         //Notify user
         System.out.println("Got it. I've added this task:");
         System.out.println("    " + addedTask);
-        System.out.println("Now you have " + listCount + " tasks in the list.");
+        System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
     }
 
     public static void addEventToList(String[] userInputs) throws DukeException {
@@ -187,13 +180,12 @@ public class Duke {
         Event addedEvent = new Event(event);
 
         //Add into list
-        userInputList[listCount] = addedEvent;
-        listCount++;
+        userInputList.add(addedEvent);
 
         //Notify user
         System.out.println("Got it. I've added this task:");
         System.out.println("    " + addedEvent);
-        System.out.println("Now you have " + listCount + " tasks in the list.");
+        System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
     }
 
     public static void addDeadlineToList(String[] userInputs) throws DukeException {
@@ -207,13 +199,12 @@ public class Duke {
         Deadline addedDeadline = new Deadline(deadline);
 
         //Add into list
-        userInputList[listCount] = addedDeadline;
-        listCount++;
+        userInputList.add(addedDeadline);
 
         //Notify user
         System.out.println("Got it. I've added this task:");
         System.out.println("    " + addedDeadline);
-        System.out.println("Now you have " + listCount + " tasks in the list.");
+        System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
     }
 
     public static void addTodoToList(String[] userInputs) throws DukeException {
@@ -231,12 +222,11 @@ public class Duke {
         Todo addedTodo = new Todo(todo);
 
         //Add into list
-        userInputList[listCount] = addedTodo;
-        listCount++;
+        userInputList.add(addedTodo);
 
         //Notify user
         System.out.println("Got it. I've added this task:");
         System.out.println("    " + addedTodo);
-        System.out.println("Now you have " + listCount + " tasks in the list.");
+        System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
     }
 }
