@@ -25,6 +25,7 @@ public class Duke {
     //Variables
     public static int listCount = 0;
     public static Task[] userInputList = new Task[100];
+    public static Task[] tempUserInputList = new Task[100];
 
     public static void main(String[] args) {
         /*
@@ -65,6 +66,9 @@ public class Duke {
                     case "done":
                         markTaskAsDone(userInputs);
                         break;
+                    case "delete":
+                        deleteTask(userInputs);
+                        break;
                     default:
                         System.out.println("OOPS!!! I'm sorry, but I don't know what that means :-(");
                         break;
@@ -81,6 +85,26 @@ public class Duke {
         } while (!userInput.equals("bye"));
 
         exitDuke();
+    }
+
+    public static void deleteTask(String[] userInputs) {
+        int indexToBeDeleted = Integer.parseInt(userInputs[1]) - 1;
+        Task deletedTask = userInputList[indexToBeDeleted];
+        //Can be replaced with manual array copy
+        //Copy from the index after the item to be deleted into temp user list
+        for (int i = indexToBeDeleted + 1; i < listCount; i++) {
+            tempUserInputList[i - 1] = userInputList[i];
+        }
+        listCount--;
+        //Copy back to user list excluding the deleted item
+        for (int i = indexToBeDeleted; i < listCount; i++) {
+            tempUserInputList[i] = userInputList[i];
+        }
+
+        //Notify user
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("    " + deletedTask);
+        System.out.println("Now you have " + listCount + " tasks in the list");
     }
 
     public static void markTaskAsDone(String[] userInputs) throws ArrayIndexOutOfBoundsException, NullPointerException {
