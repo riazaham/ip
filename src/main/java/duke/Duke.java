@@ -5,8 +5,15 @@ import duke.tasks.Event;
 import duke.tasks.Task;
 import duke.tasks.Todo;
 
+import javax.sound.midi.SysexMessage;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Chatbot for managing tasks
@@ -27,6 +34,8 @@ import java.util.ArrayList;
 public class Duke {
     //Variables
     public static ArrayList<Task> userInputList = new ArrayList<>();
+    public static final String TICK = "\u2713";
+    public static final String CROSS = "\u2718";
 
     public static void main(String[] args) {
         /*
@@ -39,6 +48,14 @@ public class Duke {
          */
 
         introMessage();
+        try {
+            getTasksFromFile();
+        } catch (FileNotFoundException f) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("____________________________________________________________");
 
         //Scanner in
         Scanner in = new Scanner(System.in);
@@ -53,13 +70,13 @@ public class Duke {
                 try {
                     switch (userInputs[0]) {
                     case "todo":
-                        addTodoToList(userInputs);
+                        addTodoToList(userInputs, true);
                         break;
                     case "deadline":
-                        addDeadlineToList(userInputs);
+                        addDeadlineToList(userInputs, true);
                         break;
                     case "event":
-                        addEventToList(userInputs);
+                        addEventToList(userInputs, true);
                         break;
                     case "list":
                         listTasks();
@@ -81,6 +98,9 @@ public class Duke {
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("OOPS!!! The specified task does not exist. There are only " +
                             userInputList.size() + " tasks");
+                } catch (IOException e) {
+                    System.out.println("OOPS!!! Something went wrong." );
+                    e.printStackTrace();
                 }
                 System.out.println("____________________________________________________________");
             }
@@ -89,9 +109,62 @@ public class Duke {
         exitDuke();
     }
 
-    public static void deleteTask(String[] userInputs) {
+    public static void getTasksFromFile() throws IOException {
+        File f = new File("./data/duke.txt");
+        boolean mkdir = new File("./data").mkdir();
+        boolean result = f.createNewFile();
+        if (mkdir | result) {
+            System.out.println("New file created at [project root]/data/duke.txt");
+            System.out.println("____________________________________________________________");
+        }
+        Scanner s = new Scanner(f);
+        int counter = 0;
+        while(s.hasNext()) {
+            String line = s.nextLine();
+            String[] lines = line.split("\\|");
+            String taskDescription = lines[2];
+
+            switch (lines[0]) {
+            case "T":
+                Todo addedTodo = new Todo(taskDescription);
+                userInputList.add(addedTodo);
+                counter++;
+                break;
+            case "D":
+                Deadline addedDeadline = new Deadline(taskDescription);
+                userInputList.add(addedDeadline);
+                counter++;
+                break;
+            case "E":
+                Event addedEvent = new Event(taskDescription);
+                userInputList.add(addedEvent);
+                counter++;
+                break;
+            default:
+                System.out.println("Invalid Format!");
+                break;
+            }
+
+            //Mark as done
+            if (Integer.parseInt(lines[1]) == 1) {
+                userInputList.get(counter - 1).setIsDone(true);
+            }
+            //System.out.println(s.nextLine());
+        }
+        listTasks();
+    }
+
+    public static void deleteTask(String[] userInputs) throws ArrayIndexOutOfBoundsException, IOException {
+        //Check for only 'delete'
+        if (userInputs.length == 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
         int indexToBeDeleted = Integer.parseInt(userInputs[1]) - 1;
         Task deletedTask = userInputList.remove(indexToBeDeleted);
+
+        //Modify local file
+        writeListToFile();
 
         //Notify user
         System.out.println("Noted. I've removed this task:");
@@ -99,7 +172,7 @@ public class Duke {
         System.out.println("Now you have " + userInputList.size() + " tasks in the list");
     }
 
-    public static void markTaskAsDone(String[] userInputs) throws ArrayIndexOutOfBoundsException {
+    public static void markTaskAsDone(String[] userInputs) throws ArrayIndexOutOfBoundsException, IOException {
         //Check for only 'done'
         if (userInputs.length == 1) {
             throw new ArrayIndexOutOfBoundsException();
@@ -108,6 +181,11 @@ public class Duke {
         //List indexed from 0, offset by 1
         int listNumber = Integer.parseInt(userInputs[1]) - 1;
         userInputList.get(listNumber).setIsDone(true);
+
+        //Modify local file
+        writeListToFile();
+
+        //notify user
         System.out.println("Nice! I've marked this task as done:\n    " + userInputList.get(listNumber));
     }
 
@@ -159,7 +237,8 @@ public class Duke {
         System.exit(0);
     }
 
-    public static void addTaskToList(Task addedTask) {
+    //Not implemented
+    public static void addTaskToList(Task addedTask, Boolean notify) {
         //Add duke.tasks.Task to list
         userInputList.add(addedTask);
 
@@ -169,7 +248,7 @@ public class Duke {
         System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
     }
 
-    public static void addEventToList(String[] userInputs) throws DukeException {
+    public static void addEventToList(String[] userInputs, Boolean notify) throws DukeException {
         //Check for only "event"
         if (userInputs.length == 1) {
             throw new DukeException("event");
@@ -179,16 +258,22 @@ public class Duke {
         String event = getFormattedString(userInputs, "/at");
         Event addedEvent = new Event(event);
 
+        //Add into local file
+        try {
+            writeToFile("E", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Add into list
         userInputList.add(addedEvent);
 
-        //Notify user
-        System.out.println("Got it. I've added this task:");
-        System.out.println("    " + addedEvent);
-        System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
+        if (notify) {
+            notifyUser(addedEvent);
+        }
     }
 
-    public static void addDeadlineToList(String[] userInputs) throws DukeException {
+    public static void addDeadlineToList(String[] userInputs, Boolean notify) throws DukeException {
         //Check for only "deadline"
         if (userInputs.length == 1) {
             throw new DukeException("deadline");
@@ -198,16 +283,23 @@ public class Duke {
         String deadline = getFormattedString(userInputs, "/by");
         Deadline addedDeadline = new Deadline(deadline);
 
+        //Add into local file
+        try {
+            writeToFile("D", deadline);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Add into list
         userInputList.add(addedDeadline);
 
-        //Notify user
-        System.out.println("Got it. I've added this task:");
-        System.out.println("    " + addedDeadline);
-        System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
+        if (notify) {
+            notifyUser(addedDeadline);
+        }
     }
 
-    public static void addTodoToList(String[] userInputs) throws DukeException {
+    public static void addTodoToList(String[] userInputs, Boolean notify)
+            throws DukeException {
         String todo = "";
 
         //Check for only "todo"
@@ -221,12 +313,48 @@ public class Duke {
         }
         Todo addedTodo = new Todo(todo);
 
+        //Add into local file
+        try {
+            writeToFile("T", todo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Add into list
         userInputList.add(addedTodo);
 
+        if (notify) {
+            notifyUser(addedTodo);
+        }
+    }
+
+    public static void writeToFile(String taskType, String taskDescription) throws IOException {
+        FileWriter fw = new FileWriter("./data/duke.txt", true);
+        String textToAdd = taskType + "|0|" + taskDescription + "\n";
+        fw.write(textToAdd);
+        fw.close();
+    }
+
+    public static void writeListToFile() throws IOException {
+        FileWriter fw = new FileWriter("./data/duke.txt");
+        String textToAdd = "";
+        for (Task task : userInputList) {
+            String[] taskDescriptions = task.toString().split("\\s+");
+            String taskType = String.valueOf(taskDescriptions[0].charAt(1));
+            String done = String.valueOf(taskDescriptions[0].charAt(4)).equals(TICK) ? "1" : "0";
+            String taskDescription = String.join(" ",
+                    Arrays.copyOfRange(taskDescriptions, 1, taskDescriptions.length));
+            textToAdd = taskType + "|" + done + "|" + taskDescription + "\n";
+            fw.write(textToAdd);
+        }
+        fw.close();
+    }
+
+
+    public static void notifyUser(Task task) {
         //Notify user
         System.out.println("Got it. I've added this task:");
-        System.out.println("    " + addedTodo);
+        System.out.println("    " + task);
         System.out.println("Now you have " + userInputList.size() + " tasks in the list.");
     }
 }
