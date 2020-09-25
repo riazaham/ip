@@ -1,3 +1,2 @@
-E|0|movie (at: 4)
-T|0|finish ironing clothes
-T|1|attend birthday party (at: Sunway lagoon)
+T|0|submit review (by: Sep 25 2020)
+T|0|run (by: Mar 3 2021)
