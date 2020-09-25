@@ -11,7 +11,7 @@ public class Parser {
     }
 
     public void splitUserInput() {
-        userInputs = userInputs = userInput.split("\\s+");
+        userInputs = userInput.split("\\s+");
     }
 
     public String parseCommand() throws DukeException {
@@ -32,6 +32,8 @@ public class Parser {
             case "done":
                 throw new ArrayIndexOutOfBoundsException();
             case "delete":
+                throw new ArrayIndexOutOfBoundsException();
+            case "find":
                 throw new ArrayIndexOutOfBoundsException();
             }
         }
@@ -80,13 +82,15 @@ public class Parser {
 
     public int parseStringDone() {
         //List indexed from 0, offset by 1
-        int index = Integer.parseInt(userInputs[1]) - 1;
-        return index;
+        return Integer.parseInt(userInputs[1]) - 1;
     }
 
     public int parseStringDelete() {
         //List indexed from 0, offset by 1
-        int index = Integer.parseInt(userInputs[1]) - 1;
-        return index;
+        return Integer.parseInt(userInputs[1]) - 1;
+    }
+
+    public String parseStringFind() {
+        return userInputs[1];
     }
 }

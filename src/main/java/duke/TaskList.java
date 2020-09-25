@@ -6,6 +6,7 @@ import duke.tasks.Task;
 import duke.tasks.Todo;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static duke.Duke.storage;
@@ -67,6 +68,25 @@ public class TaskList {
 
         //notify user
         System.out.println("Nice! I've marked this task as done:\n    " + taskList.get(index));
+    }
+
+    public ArrayList<Task> findTasks(String searchWord) {
+        ArrayList<Task> foundTasksList = new ArrayList<>();
+        for(Task task : taskList) {
+            if (task.getDescription().contains(searchWord)) {
+                foundTasksList.add(task);
+            }
+        }
+        return foundTasksList;
+    }
+
+    public void listTasks(ArrayList<Task> arrayList) {
+        System.out.println("Here are the matching tasks in your list:");
+        int counter = 1;
+        for (Task task : arrayList) {
+            System.out.println(counter + ". " + task);
+            counter++;
+        }
     }
 
     public void listTasks() {

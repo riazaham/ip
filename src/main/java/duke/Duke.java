@@ -100,6 +100,11 @@ public class Duke {
                     taskList.deleteTask(index);
                     storage.localSaveAll();
                     break;
+                case "find":
+                    String searchWord = parser.parseStringFind();
+                    ArrayList<Task> foundTasksList = taskList.findTasks(searchWord);
+                    taskList.listTasks(foundTasksList);
+                    break;
                 case "bye":
                     exitDuke();
                     break;
@@ -110,8 +115,7 @@ public class Duke {
             } catch (DukeException e) {
                 System.out.println(e);
             } catch (ArrayIndexOutOfBoundsException e) { //done and delete
-                System.out.println("OOPS!!! The command needs to be followed by a task number or the task" +
-                        "number does not exist!");
+                System.out.println("OOPS!!! The command needs to be followed by a valid task number or description!");
             }
             System.out.println("____________________________________________________________");
         }
