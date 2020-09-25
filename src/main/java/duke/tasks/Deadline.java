@@ -3,7 +3,7 @@ package duke.tasks;
 import duke.tasks.Task;
 
 public class Deadline extends Task {
-    protected final String typeOfTask = "[D]";
+    protected final String typeOfTask = "D";
 
     public Deadline(String description) {
         super(description);
@@ -15,6 +15,6 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return getTypeOfTask() + getStatusIcon() + " " + getDescription();
+        return "[" + getTypeOfTask() + "]" + getStatusIcon() + " " + getDescription();
     }
 }

@@ -1,0 +1,5 @@
+T|0|add
+D|1|review (by: friday)
+T|0|hello
+T|1|understand
+E|0|movie (at: 4)
