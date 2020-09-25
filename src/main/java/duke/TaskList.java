@@ -15,7 +15,7 @@ public class TaskList {
 
     private ArrayList<Task> taskList = new ArrayList<>();
 
-    public void addEventToList(String taskDescription, Boolean notify) throws DukeException {
+    public void addEventToList(String taskDescription, Boolean notify) {
         Event addedEvent = new Event(taskDescription);
         taskList.add(addedEvent);
         if (notify) {
@@ -23,7 +23,7 @@ public class TaskList {
         }
     }
 
-    public void addDeadlineToList(String taskDescription, Boolean notify) throws DukeException {
+    public void addDeadlineToList(String taskDescription, Boolean notify) {
         Deadline addedDeadline = new Deadline(taskDescription);
         taskList.add(addedDeadline);
         if (notify) {
@@ -31,7 +31,7 @@ public class TaskList {
         }
     }
 
-    public void addTodoToList(String taskDescription, Boolean notify) throws DukeException {
+    public void addTodoToList(String taskDescription, Boolean notify) {
         Todo addedTodo = new Todo(taskDescription);
         taskList.add(addedTodo);
         if (notify) {
@@ -46,10 +46,14 @@ public class TaskList {
         System.out.println("Now you have " + taskList.size() + " tasks in the list.");
     }
 
-    public void deleteTask(int index) throws ArrayIndexOutOfBoundsException {
+    public void deleteTask(int index) throws DukeException {
         if (index >= taskList.size()) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new DukeException("delete OOB");
         }
+        if (index <= 0) {
+            throw new DukeException("delete negative");
+        }
+
 
         Task deletedTask = taskList.remove(index);
 
@@ -59,9 +63,12 @@ public class TaskList {
         System.out.println("Now you have " + taskList.size() + " tasks in the list");
     }
 
-    public void markTaskAsDone(int index) throws ArrayIndexOutOfBoundsException {
+    public void markTaskAsDone(int index) throws DukeException {
         if (index >= taskList.size()) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new DukeException("done OOB");
+        }
+        if (index <= 0) {
+            throw new DukeException("done negative");
         }
 
         taskList.get(index).setIsDone(true);

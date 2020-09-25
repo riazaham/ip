@@ -1,5 +1,8 @@
 package duke;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Parser {
 
     public String userInput;
@@ -30,11 +33,11 @@ public class Parser {
             case "event":
                 throw new DukeException("event");
             case "done":
-                throw new ArrayIndexOutOfBoundsException();
+                throw new DukeException("done");
             case "delete":
-                throw new ArrayIndexOutOfBoundsException();
+                throw new DukeException("delete");
             case "find":
-                throw new ArrayIndexOutOfBoundsException();
+                throw new DukeException("find");
             }
         }
     }
@@ -45,13 +48,11 @@ public class Parser {
         for (int i = 1; i < userInputs.length; i++) {
             if (userInputs[i].equals("/at")) { //split at delimiter
                 text += "(at: ";
-            } else if (i == userInputs.length - 1) { //Last letter
-                text += userInputs[i] + ")";
             } else {
                 text += userInputs[i] + " ";
             }
         }
-        return text;
+        return text.stripTrailing() + ")";
     }
 
     public String parseStringDeadline() {
@@ -59,13 +60,15 @@ public class Parser {
         for (int i = 1; i < userInputs.length; i++) {
             if (userInputs[i].equals("/by")) { //split at delimiter
                 text += "(by: ";
-            } else if (i == userInputs.length - 1) { //Last letter
-                text += userInputs[i] + ")";
-            } else {
+            }
+            else if (userInputs[i].contains("/")) {
+                text += parseDate(userInputs[i]) + " ";
+            }
+            else {
                 text += userInputs[i] + " ";
             }
         }
-        return text;
+        return text.stripTrailing() + ")";
     }
 
     public String parseStringTodo() {
@@ -80,17 +83,49 @@ public class Parser {
         return text;
     }
 
-    public int parseStringDone() {
+    public int parseStringDone() throws NumberFormatException {
         //List indexed from 0, offset by 1
         return Integer.parseInt(userInputs[1]) - 1;
     }
 
-    public int parseStringDelete() {
+    public int parseStringDelete() throws NumberFormatException {
         //List indexed from 0, offset by 1
         return Integer.parseInt(userInputs[1]) - 1;
     }
 
     public String parseStringFind() {
         return userInputs[1];
+    }
+
+    public String parseDate(String date) {
+        String[] dateElements = date.split("/");
+
+        //Check for day format -> must be of length 2 digits (e.g 03)
+        if (dateElements[0].length() == 1) {
+            dateElements[0] = "0" + dateElements[0];
+        }
+
+        //Check for month format -> must be of length 2 digits (e.g 03)
+        if (dateElements[1].length() == 1) {
+            dateElements[1] = "0" + dateElements[1];
+        }
+
+        //Reorder date elements to yyyy-mm-dd -> format required for localDate class
+        dateElements = new String[] {dateElements[2], dateElements[1], dateElements[0]};
+
+        //Check for month format -> must be of length 2 digits (e.g 03)
+        if (dateElements[1].length() == 1) {
+            dateElements[1] = "0" + dateElements[1];
+        }
+
+        //Check for date format -> must be of length 2 digits (e.g 03)
+        if (dateElements[2].length() == 1) {
+            dateElements[2] = "0" + dateElements[2];
+        }
+
+        String dateFormatted = String.join("-", dateElements);
+        System.out.println(dateFormatted);
+        LocalDate localDate = LocalDate.parse(dateFormatted);
+        return localDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
     }
 }
