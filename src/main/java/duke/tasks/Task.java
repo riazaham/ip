@@ -1,5 +1,9 @@
 package duke.tasks;
 
+/**
+ * Task class for creating basic task objects that hold represent the tasks input by the user
+ */
+
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -29,6 +33,12 @@ public class Task {
         isDone = done;
     }
 
+    /**
+     * Currently only used for subclasses to override
+     * Cannot be called by user as a command
+     * @return the task preceded by whether the task is done
+     * e.g [X] Submit assignment
+     */
     @Override
     public String toString() {
         return getStatusIcon() + " " + getDescription();

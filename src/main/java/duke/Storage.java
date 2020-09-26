@@ -10,6 +10,12 @@ import java.io.IOException;
 
 import static duke.Duke.taskList;
 
+/**
+ * File storage class to handle saving to and retrieving from local hard drive
+ * Locally saved tasks are of the form: taskType|0 or 1|taskDescription e.g E|1|taskDescription
+ * 0 represents that the task is not done
+ * 1 represents that the task is done
+ */
 
 public class Storage {
 
@@ -24,13 +30,19 @@ public class Storage {
     public void showSavedContents() {
         try {
             initStorage();
-        } catch (IOException | DukeException e) {
-            System.out.println("Error!");
+        } catch (IOException e) {
+            System.out.println("File Error!");
             e.printStackTrace();
         }
     }
 
-    public void initStorage() throws IOException, DukeException {
+    /**
+     * Retrieves info from the local file and adds it to the tasklist
+     * Creates folder if doesn't exist
+     * Creates text file if doesn't exist
+     * @throws IOException if file not found or file is corrupted
+     */
+    public void initStorage() throws IOException {
         File f = new File("./data/duke.txt");
         boolean mkdir = new File("./data").mkdir();
         boolean result = f.createNewFile();
@@ -74,13 +86,19 @@ public class Storage {
 
     public void localSave(String taskType, String taskDescription) {
         try {
-            writeToFile("T", taskDescription);
+            writeToFile(taskType, taskDescription);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //To write to file when a new task is added
+    /**
+     * Writes to saved local file when a new task is added
+     * Saves it in the form of taskType|0 or 1|taskDescription e.g E|1|taskDescription
+     * @param taskType type of task
+     * @param taskDescription formatted task description from user input
+     * @throws IOException if file not found or corrupted
+     */
     private void writeToFile(String taskType, String taskDescription) throws IOException {
         FileWriter fw = new FileWriter("./data/duke.txt", true);
         String textToAdd = taskType + "|0|" + taskDescription + "\n";
@@ -97,7 +115,10 @@ public class Storage {
         }
     }
 
-    //To write to file when a a task is modified
+    /**
+     * Writes to local file when a task is modified i.e marked as done or deleted
+     * @throws IOException if file not found or corrupted
+     */
     public void writeListToFile() throws IOException {
         FileWriter fw = new FileWriter("./data/duke.txt");
         String textToAdd = "";

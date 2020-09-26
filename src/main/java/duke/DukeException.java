@@ -1,9 +1,11 @@
 package duke;
 
 import java.util.Arrays;
-
 import static duke.Duke.taskList;
 
+/**
+ * Exception class for handling Duke commands
+ */
 public class DukeException extends Exception {
     private String error;
     private final String[] taskTypes = new String[] {"todo","deadline","event", "done", "delete", "find"};
@@ -18,6 +20,9 @@ public class DukeException extends Exception {
         return error;
     }
 
+    /**
+     * @return the appropriate error message with the required rectification
+     */
     @Override
     public String toString() {
         if (Arrays.asList(taskTypes).contains(error)) {
