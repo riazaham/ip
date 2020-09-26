@@ -3,6 +3,11 @@ package duke;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Parser class to make sense of the inputs from the user
+ * Currently parses all commands
+ * Throws DukeExceptions for invalid commands
+ */
 public class Parser {
 
     public String userInput;
@@ -17,12 +22,23 @@ public class Parser {
         userInputs = userInput.split("\\s+");
     }
 
+    /**
+     * Check if the command is a valid Duke command
+     * @return the command if it is valid
+     * @throws DukeException if command is not valid
+     */
     public String parseCommand() throws DukeException {
         String command = userInputs[0];
         checkException(command);
         return command;
     }
 
+    /**
+     * Checks if user input valid command
+     * @param command takes in the command input by user
+     * @throws DukeException when user misses out description
+     * @throws ArrayIndexOutOfBoundsException when user misses out task no. or inputs invalid task no.
+     */
     public void checkException(String command) throws DukeException, ArrayIndexOutOfBoundsException {
         if (userInputs.length == 1) {
             switch (command) {
@@ -42,7 +58,10 @@ public class Parser {
         }
     }
 
-    //Split at delimiter with format -> before (delimiter: after)
+    /**
+     * Split at delimiter "/at" for event command
+     * @return format for event tasks: e.g Attend Birthday Party (at: Beach Resort)
+     */
     public String parseStringEvent() {
         String text = "";
         for (int i = 1; i < userInputs.length; i++) {
@@ -55,6 +74,10 @@ public class Parser {
         return text.stripTrailing() + ")";
     }
 
+    /**
+     * Split at delimiter "/by" for event command
+     * @return format for event tasks: e.g Submit assignment (by: Sunday 2359)
+     */
     public String parseStringDeadline() {
         String text = "";
         for (int i = 1; i < userInputs.length; i++) {
@@ -71,6 +94,10 @@ public class Parser {
         return text.stripTrailing() + ")";
     }
 
+    /**
+     * No delimiter to split at
+     * @return format for todo tasks: e.g Submit assignment
+     */
     public String parseStringTodo() {
         String text = "";
         for (int i = 1; i < userInputs.length; i++) {
@@ -90,13 +117,35 @@ public class Parser {
 
     public int parseStringDelete() throws NumberFormatException {
         //List indexed from 0, offset by 1
+
+    /**
+     * @return integer index at which the task needs to marked done
+     * @throws NumberFormatException if the task number is of invalid format (e.g string)
+     */
+    public int parseStringDone() throws NumberFormatException {
         return Integer.parseInt(userInputs[1]) - 1;
     }
 
+    /**
+     * @return integer index at which the task needs to deleted
+     * @throws NumberFormatException if the task number is of invalid format (e.g string)
+     */
+    public int parseStringDelete() throws NumberFormatException {
+        return Integer.parseInt(userInputs[1]) - 1;
+    }
+
+    /**
+     * @return the searchword that the user input
+     */
     public String parseStringFind() {
         return userInputs[1];
     }
 
+    /**
+     * parses any date info
+     * @param date takes in date of the format 1/1/2020
+     * @return localDate object formatted as MMM dd yyyy e.g Jan 1 2020
+     */
     public String parseDate(String date) {
         String[] dateElements = date.split("/");
 
