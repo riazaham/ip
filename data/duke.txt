@@ -1,7 +1,2 @@
-<<<<<<< Updated upstream
-E|0|movie (at: 4)
-T|0|finish ironing clothes
-T|1|attend birthday party (at: Sunway lagoon)
-=======
+
 T|1|chase George away
->>>>>>> Stashed changes

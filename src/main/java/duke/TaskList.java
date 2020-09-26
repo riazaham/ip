@@ -76,7 +76,7 @@ public class TaskList {
      */
     public void deleteTask(int index) throws DukeException {
         if (index >= taskList.size()) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new DukeException("delete OOB");
         }
         if (index < 0) {
             throw new DukeException("delete negative");

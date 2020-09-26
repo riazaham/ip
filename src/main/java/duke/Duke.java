@@ -122,8 +122,8 @@ public class Duke {
                 }
             } catch (DukeException e) {
                 System.out.println(e);
-            } catch (ArrayIndexOutOfBoundsException e) { //done and delete
-                System.out.println("OOPS!!! The command needs to be followed by a valid task number or description!");
+            } catch (NumberFormatException e) {
+                System.out.println("OOPS!!! Please input a valid task number greater than 0");
             }
             System.out.println("____________________________________________________________");
         }

@@ -1,7 +1,5 @@
 package duke;
 
-<<<<<<< Updated upstream
-=======
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -10,8 +8,6 @@ import java.time.format.DateTimeFormatter;
  * Currently parses all commands
  * Throws DukeExceptions for invalid commands
  */
-
->>>>>>> Stashed changes
 public class Parser {
 
     public String userInput;
@@ -53,11 +49,11 @@ public class Parser {
             case "event":
                 throw new DukeException("event");
             case "done":
-                throw new ArrayIndexOutOfBoundsException();
+                throw new DukeException("done");
             case "delete":
-                throw new ArrayIndexOutOfBoundsException();
+                throw new DukeException("delete");
             case "find":
-                throw new ArrayIndexOutOfBoundsException();
+                throw new DukeException("find");
             }
         }
     }
@@ -71,13 +67,11 @@ public class Parser {
         for (int i = 1; i < userInputs.length; i++) {
             if (userInputs[i].equals("/at")) { //split at delimiter
                 text += "(at: ";
-            } else if (i == userInputs.length - 1) { //Last letter
-                text += userInputs[i] + ")";
             } else {
                 text += userInputs[i] + " ";
             }
         }
-        return text;
+        return text.stripTrailing() + ")";
     }
 
     /**
@@ -89,13 +83,15 @@ public class Parser {
         for (int i = 1; i < userInputs.length; i++) {
             if (userInputs[i].equals("/by")) { //split at delimiter
                 text += "(by: ";
-            } else if (i == userInputs.length - 1) { //Last letter
-                text += userInputs[i] + ")";
-            } else {
+            }
+            else if (userInputs[i].contains("/")) {
+                text += parseDate(userInputs[i]) + " ";
+            }
+            else {
                 text += userInputs[i] + " ";
             }
         }
-        return text;
+        return text.stripTrailing() + ")";
     }
 
     /**
@@ -114,15 +110,14 @@ public class Parser {
         return text;
     }
 
-<<<<<<< Updated upstream
-    public int parseStringDone() {
+    public int parseStringDone() throws NumberFormatException {
         //List indexed from 0, offset by 1
         return Integer.parseInt(userInputs[1]) - 1;
     }
 
-    public int parseStringDelete() {
+    public int parseStringDelete() throws NumberFormatException {
         //List indexed from 0, offset by 1
-=======
+
     /**
      * @return integer index at which the task needs to marked done
      * @throws NumberFormatException if the task number is of invalid format (e.g string)
@@ -136,7 +131,6 @@ public class Parser {
      * @throws NumberFormatException if the task number is of invalid format (e.g string)
      */
     public int parseStringDelete() throws NumberFormatException {
->>>>>>> Stashed changes
         return Integer.parseInt(userInputs[1]) - 1;
     }
 
@@ -146,8 +140,6 @@ public class Parser {
     public String parseStringFind() {
         return userInputs[1];
     }
-<<<<<<< Updated upstream
-=======
 
     /**
      * parses any date info
@@ -185,5 +177,4 @@ public class Parser {
         LocalDate localDate = LocalDate.parse(dateFormatted);
         return localDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
     }
->>>>>>> Stashed changes
 }
