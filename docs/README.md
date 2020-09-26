@@ -84,6 +84,7 @@ Examples:
 * `list` Shows all the tasks in the list
 
 ## Command Summary
+
 Commands | Action | Examples
 ------------ | ------------- | -------------
 **todo** | Adds a todo task to the list of tasks | `todo Go for a morning run`
