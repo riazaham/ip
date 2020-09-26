@@ -42,6 +42,11 @@ public class Duke {
     public static String command;
     public static int index;
 
+    /**
+     * Displays intro message
+     * Retrieves and displays the saved local file in a list form
+     * Runs the main program that takes in user inputs
+     */
     public static void main(String[] args) {
         /*
          * String logo = " ____        _        \n"
@@ -59,6 +64,9 @@ public class Duke {
         run();
     }
 
+    /**
+     * Takes in the user inputs and parses it into Duke understandable commands
+     */
     public static void run() {
         //Scanner in
         Scanner in = new Scanner(System.in);
