@@ -110,14 +110,6 @@ public class Parser {
         return text;
     }
 
-    public int parseStringDone() throws NumberFormatException {
-        //List indexed from 0, offset by 1
-        return Integer.parseInt(userInputs[1]) - 1;
-    }
-
-    public int parseStringDelete() throws NumberFormatException {
-        //List indexed from 0, offset by 1
-
     /**
      * @return integer index at which the task needs to marked done
      * @throws NumberFormatException if the task number is of invalid format (e.g string)
