@@ -20,9 +20,6 @@ public class TaskList {
 
     private ArrayList<Task> taskList = new ArrayList<>();
 
-<<<<<<< Updated upstream
-    public void addEventToList(String taskDescription, Boolean notify) throws DukeException {
-=======
     /**
      * Adds event task to list
      * Format of event: Attend Birthday Party (at: Beach Resort)
@@ -30,7 +27,6 @@ public class TaskList {
      * @param notify boolean to notify user when event is added
      */
     public void addEventToList(String taskDescription, Boolean notify) {
->>>>>>> Stashed changes
         Event addedEvent = new Event(taskDescription);
         taskList.add(addedEvent);
         if (notify) {
@@ -38,9 +34,6 @@ public class TaskList {
         }
     }
 
-<<<<<<< Updated upstream
-    public void addDeadlineToList(String taskDescription, Boolean notify) throws DukeException {
-=======
     /**
      * Adds deadline task to list
      * Format of deadline: Submit assignment (by: Sunday 2359)
@@ -48,7 +41,6 @@ public class TaskList {
      * @param notify boolean to notify user when event is added
      */
     public void addDeadlineToList(String taskDescription, Boolean notify) {
->>>>>>> Stashed changes
         Deadline addedDeadline = new Deadline(taskDescription);
         taskList.add(addedDeadline);
         if (notify) {
@@ -56,9 +48,6 @@ public class TaskList {
         }
     }
 
-<<<<<<< Updated upstream
-    public void addTodoToList(String taskDescription, Boolean notify) throws DukeException {
-=======
     /**
      * Adds todo task to list
      * Format of todo: Go for morning run
@@ -66,7 +55,6 @@ public class TaskList {
      * @param notify boolean to notify user when event is added
      */
     public void addTodoToList(String taskDescription, Boolean notify) {
->>>>>>> Stashed changes
         Todo addedTodo = new Todo(taskDescription);
         taskList.add(addedTodo);
         if (notify) {
@@ -81,25 +69,18 @@ public class TaskList {
         System.out.println("Now you have " + taskList.size() + " tasks in the list.");
     }
 
-<<<<<<< Updated upstream
-    public void deleteTask(int index) throws ArrayIndexOutOfBoundsException {
-=======
     /**
      * Deletes a specific task using it's index
      * @param index task number to be deleted
      * @throws DukeException if task number is of invalid format or doesn't exist
      */
     public void deleteTask(int index) throws DukeException {
->>>>>>> Stashed changes
         if (index >= taskList.size()) {
             throw new ArrayIndexOutOfBoundsException();
         }
-<<<<<<< Updated upstream
-=======
         if (index < 0) {
             throw new DukeException("delete negative");
         }
->>>>>>> Stashed changes
 
         Task deletedTask = taskList.remove(index);
 
@@ -109,11 +90,6 @@ public class TaskList {
         System.out.println("Now you have " + taskList.size() + " tasks in the list");
     }
 
-<<<<<<< Updated upstream
-    public void markTaskAsDone(int index) throws ArrayIndexOutOfBoundsException {
-        if (index >= taskList.size()) {
-            throw new ArrayIndexOutOfBoundsException();
-=======
     /**
      * Marks a specific task as done using it's index
      * @param index task number to be marked as done
@@ -125,7 +101,6 @@ public class TaskList {
         }
         if (index < 0) {
             throw new DukeException("done negative");
->>>>>>> Stashed changes
         }
 
         taskList.get(index).setIsDone(true);
