@@ -71,6 +71,7 @@ Examples:
 Finds all tasks matching with the DESCRIPTION
 
 Format: `find DESCRIPTION`
+* The DESCRIPTION is case-sensitive
 
 Examples:
 * `find book` Shows all tasks that contains **book** in its description
