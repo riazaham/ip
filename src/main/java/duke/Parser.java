@@ -59,13 +59,13 @@ public class Parser {
         } else {
             switch (command) {
             case "deadline":
-                if (Arrays.asList(userInputs).contains("/at")) {
-                    throw new DukeException("/at");
+                if (!Arrays.asList(userInputs).contains("/by")) {
+                    throw new DukeException("/by");
                 }
                 break;
             case "event":
-                if (Arrays.asList(userInputs).contains("/by")) {
-                    throw new DukeException("/by");
+                if (!Arrays.asList(userInputs).contains("/at")) {
+                    throw new DukeException("/at");
                 }
                 break;
             }

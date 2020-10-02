@@ -38,10 +38,10 @@ public class DukeException extends Exception {
             return "OOPS!!! Please input a valid task number greater than 0";
         }
         else if (error.equals(modifierAt)) {
-            return "OOPS!!! Please use /by for deadlines";
+            return "OOPS!!! Please use '/at' for events";
         }
         else if (error.equals(modifierBy)) {
-            return "OOPS!!! Please use /at for events";
+            return "OOPS!!! Please use '/by' for deadlines";
         }
         return "OOPS!!! Unknown error occurred";
     }
