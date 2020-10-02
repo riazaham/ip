@@ -1,1 +1,2 @@
-T|1|chase George awayD|0|hello (by: tomorrow)
+E|0|nanana (at: 1/1/1)
+E|0|blue (at: Jan 1 2020)

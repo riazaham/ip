@@ -2,6 +2,7 @@ package duke;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 /**
  * Parser class to make sense of the inputs from the user
@@ -55,6 +56,19 @@ public class Parser {
             case "find":
                 throw new DukeException("find");
             }
+        } else {
+            switch (command) {
+            case "deadline":
+                if (Arrays.asList(userInputs).contains("/at")) {
+                    throw new DukeException("/at");
+                }
+                break;
+            case "event":
+                if (Arrays.asList(userInputs).contains("/by")) {
+                    throw new DukeException("/by");
+                }
+                break;
+            }
         }
     }
 
@@ -64,25 +78,11 @@ public class Parser {
      */
     public String parseStringEvent() {
         String text = "";
+        String closing = "";
         for (int i = 1; i < userInputs.length; i++) {
             if (userInputs[i].equals("/at")) { //split at delimiter
                 text += "(at: ";
-            } else {
-                text += userInputs[i] + " ";
-            }
-        }
-        return text.stripTrailing() + ")";
-    }
-
-    /**
-     * Split at delimiter "/by" for event command
-     * @return format for event tasks: e.g Submit assignment (by: Sunday 2359)
-     */
-    public String parseStringDeadline() {
-        String text = "";
-        for (int i = 1; i < userInputs.length; i++) {
-            if (userInputs[i].equals("/by")) { //split at delimiter
-                text += "(by: ";
+                closing = ")";
             }
             else if (userInputs[i].contains("/")) {
                 text += parseDate(userInputs[i]) + " ";
@@ -91,7 +91,29 @@ public class Parser {
                 text += userInputs[i] + " ";
             }
         }
-        return text.stripTrailing() + ")";
+        return text.stripTrailing() + closing;
+    }
+
+    /**
+     * Split at delimiter "/by" for event command
+     * @return format for event tasks: e.g Submit assignment (by: Sunday 2359)
+     */
+    public String parseStringDeadline() {
+        String text = "";
+        String closing = "";
+        for (int i = 1; i < userInputs.length; i++) {
+            if (userInputs[i].equals("/by")) { //split at delimiter
+                text += "(by: ";
+                closing = ")";
+            }
+            else if (userInputs[i].contains("/")) {
+                text += parseDate(userInputs[i]) + " ";
+            }
+            else {
+                text += userInputs[i] + " ";
+            }
+        }
+        return text.stripTrailing() + closing;
     }
 
     /**

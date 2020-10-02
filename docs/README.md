@@ -38,10 +38,14 @@ Adds a task as an event to the list of tasks
 Format: `event TASK_DESCRIPTION /at EVENT`
 * Saves the task to a local file
 * Task saved as TASK_DESCRIPTION (at: EVENT)
+* If the TASK_DESCRIPTON contains a date in the form
+**dd/mm/yyyy** it will be saved as MMM dd yyyy
 
 Examples:
 * `event Attend competition /at Stadium` Adds the task 
 "Attent competition (at: Stadium)" to the task list
+* `event Watch TV /at 1/1/2020` Adds the task 
+"Watch TV (at: Jan 1 2020)" to the task list
 
 ### Marking a task as done : `done`
 Marks the task at the specified task number as done
@@ -71,6 +75,7 @@ Examples:
 Finds all tasks matching with the DESCRIPTION
 
 Format: `find DESCRIPTION`
+* The DESCRIPTION is case-sensitive
 
 Examples:
 * `find book` Shows all tasks that contains **book** in its description
@@ -84,6 +89,7 @@ Examples:
 * `list` Shows all the tasks in the list
 
 ## Command Summary
+
 Commands | Action | Examples
 ------------ | ------------- | -------------
 **todo** | Adds a todo task to the list of tasks | `todo Go for a morning run`
